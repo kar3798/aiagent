@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+
+# Text files
+token_for_git.txt
