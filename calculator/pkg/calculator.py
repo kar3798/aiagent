@@ -27,12 +27,8 @@ class Calculator:
 
         for token in tokens:
             if token in self.operators:
-                while (
-                    operators
-                    and operators[-1] in self.operators
-                    and self.precedence[operators[-1]] >= self.precedence[token]
-                ):
-                    self._apply_operator(operators, values)
+                while (operators and self.precedence[token] <= self.precedence.get(operators[-1], 0)):
+                    self._apply_operator_stack(operators, values)
                 operators.append(token)
             else:
                 try:
@@ -41,14 +37,15 @@ class Calculator:
                     raise ValueError(f"invalid token: {token}")
 
         while operators:
-            self._apply_operator(operators, values)
+            self._apply_operator_stack(operators, values)
 
         if len(values) != 1:
             raise ValueError("invalid expression")
 
         return values[0]
 
-    def _apply_operator(self, operators, values):
+
+    def _apply_operator_stack(self, operators, values):
         if not operators:
             return
 
